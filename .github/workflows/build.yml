@@ -1,0 +1,34 @@
+name: Build G6 APK
+
+on:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+            flutter-version: 'stable'
+
+      - name: Install Flet CLI
+        run: pip install flet-cli
+
+      - name: Build APK
+        run: flet build apk
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release
+          path: build/apk/app-release.apk
